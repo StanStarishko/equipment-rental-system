@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Bookings')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Bookings</h1>
+        <a th:href="@{/bookings/new}" class="btn btn-primary">New Booking</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">
+            <p>No bookings have been made yet.</p>
+            <a th:href="@{/bookings/new}" class="btn btn-primary">Create First Booking</a>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(bookings)}" class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Equipment</th>
+                        <th>Booked By</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Days</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="booking : ${bookings}">
+                        <td th:text="${booking.id}">1</td>
+                        <td th:text="${booking.equipment.name}">Equipment</td>
+                        <td th:text="${booking.user.fullName}">User</td>
+                        <td th:text="${booking.dateFrom}">2026-01-01</td>
+                        <td th:text="${booking.dateTo}">2026-01-05</td>
+                        <td th:text="${booking.durationDays}">5</td>
+                        <td th:text="${booking.purpose}">Purpose</td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="'badge-' + ${booking.status.name().toLowerCase()}"
+                                  th:text="${booking.status}">STATUS</span>
+                        </td>
+                        <td>
+                            <form th:if="${booking.active}"
+                                  th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post"
+                                  onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

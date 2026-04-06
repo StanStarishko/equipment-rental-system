@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('New Booking')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>New Booking</h1>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card">
+        <form th:action="@{/bookings/save}" th:object="${booking}" method="post">
+
+            <div class="form-group">
+                <label for="equipmentId">Equipment</label>
+                <select id="equipmentId" name="equipmentId" class="form-control" required>
+                    <option value="">Select equipment...</option>
+                    <option th:each="item : ${equipmentList}"
+                            th:value="${item.id}"
+                            th:text="${item.name + ' (' + item.status + ')'}"
+                            th:disabled="${item.status.name() == 'MAINTENANCE' or item.status.name() == 'UNAVAILABLE'}">Equipment</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userId">Staff Member</label>
+                <select id="userId" name="userId" class="form-control" required>
+                    <option value="">Select staff member...</option>
+                    <option th:each="user : ${users}"
+                            th:value="${user.id}"
+                            th:text="${user.fullName + ' (' + user.department + ')'}">User</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dateFrom">Start Date</label>
+                    <input type="date" id="dateFrom" th:field="*{dateFrom}" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="dateTo">End Date</label>
+                    <input type="date" id="dateTo" th:field="*{dateTo}" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="purpose">Purpose</label>
+                <input type="text" id="purpose" th:field="*{purpose}" class="form-control"
+                       placeholder="Reason for booking this equipment" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create Booking</button>
+                <a th:href="@{/bookings}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

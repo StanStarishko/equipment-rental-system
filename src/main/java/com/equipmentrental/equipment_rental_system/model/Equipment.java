@@ -1,6 +1,9 @@
 package com.equipmentrental.equipment_rental_system.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,25 +24,29 @@ public class Equipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Equipment name is required")
     @Column(nullable = false)
     private String name;
 
     private String description;
 
+    @NotBlank(message = "Location is required")
     @Column(nullable = false)
     private String location;
 
     private String condition;
 
+    @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EquipmentStatus status;
 
     private LocalDate purchaseDate;
 
+    @DecimalMin(value = "0.00", message = "Cost per day must not be negative")
     private BigDecimal costPerDay;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 

@@ -5,6 +5,8 @@ import com.equipmentrental.equipment_rental_system.exception.InvalidBookingDates
 import com.equipmentrental.equipment_rental_system.exception.ResourceNotFoundException;
 import com.equipmentrental.equipment_rental_system.model.*;
 import com.equipmentrental.equipment_rental_system.repository.BookingRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class BookingService {
+
+    private static final Logger log = LoggerFactory.getLogger(BookingService.class);
 
     private final BookingRepository bookingRepository;
     private final EquipmentService equipmentService;
@@ -58,6 +62,8 @@ public class BookingService {
 
         // BR-05: validate date range
         if (booking.getDateFrom().isAfter(booking.getDateTo())) {
+            log.warn("Booking rejected: invalid date range {} to {}",
+                    booking.getDateFrom(), booking.getDateTo());
             throw new InvalidBookingDatesException(
                     booking.getDateFrom().toString(),
                     booking.getDateTo().toString());
@@ -77,6 +83,9 @@ public class BookingService {
                 booking.getDateTo());
 
         if (!conflictingBookings.isEmpty()) {
+            log.warn("Booking rejected: conflict detected for equipment '{}' (ID: {}) on dates {} to {}",
+                    equipment.getName(), equipment.getId(),
+                    booking.getDateFrom(), booking.getDateTo());
             throw new BookingConflictException(
                     equipment.getName(),
                     booking.getDateFrom().toString(),
@@ -92,15 +101,15 @@ public class BookingService {
         // BR-08: update equipment status to reflect the active booking
         equipmentService.updateStatus(equipment.getId(), EquipmentStatus.BOOKED);
 
+        log.info("Booking created: ID {}, equipment '{}', user '{}', dates {} to {}",
+                savedBooking.getId(), equipment.getName(), bookingUser.getFullName(),
+                savedBooking.getDateFrom(), savedBooking.getDateTo());
+
         return savedBooking;
     }
 
     /**
      * Cancels an existing booking.
-     *
-     * KNOWN ISSUE: equipment status is not reverted to AVAILABLE when
-     * the cancelled booking was the only active booking for that item.
-     * This violates BR-08 and will be addressed after testing.
      */
     @Transactional
     public Booking cancelBooking(Long bookingId) {
@@ -109,8 +118,12 @@ public class BookingService {
 
         // BUG: should check if other active bookings exist for this equipment
         // and revert status to AVAILABLE if none remain.
-        // Currently the equipment stays BOOKED even after all bookings are cancelled.
 
-        return bookingRepository.save(booking);
+        Booking cancelledBooking = bookingRepository.save(booking);
+
+        log.info("Booking cancelled: ID {}, equipment '{}' (ID: {})",
+                bookingId, booking.getEquipment().getName(), booking.getEquipment().getId());
+
+        return cancelledBooking;
     }
 }

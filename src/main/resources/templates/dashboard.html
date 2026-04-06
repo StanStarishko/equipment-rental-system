@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <!-- Equipment availability stats -->
+    <div class="stats-grid">
+        <div class="stat-card available">
+            <div class="stat-value" th:text="${availableCount}">0</div>
+            <div class="stat-label">Available</div>
+        </div>
+        <div class="stat-card booked">
+            <div class="stat-value" th:text="${bookedCount}">0</div>
+            <div class="stat-label">Booked</div>
+        </div>
+        <div class="stat-card maintenance">
+            <div class="stat-value" th:text="${maintenanceCount}">0</div>
+            <div class="stat-label">Maintenance</div>
+        </div>
+        <div class="stat-card users">
+            <div class="stat-value" th:text="${totalUsers}">0</div>
+            <div class="stat-label">Staff Members</div>
+        </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Quick Actions</h2>
+        </div>
+        <div class="btn-group">
+            <a th:href="@{/bookings/new}" class="btn btn-primary">New Booking</a>
+            <a th:href="@{/equipment/new}" class="btn btn-success">Add Equipment</a>
+            <a th:href="@{/equipment}" class="btn btn-secondary">View All Equipment</a>
+        </div>
+    </div>
+
+    <!-- Active bookings -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Active Bookings</h2>
+            <a th:href="@{/bookings}" class="btn btn-sm btn-secondary">View All</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(activeBookings)}" class="empty-state">
+            <p>No active bookings at the moment.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(activeBookings)}" class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Equipment</th>
+                        <th>Booked By</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="booking : ${activeBookings}">
+                        <td th:text="${booking.equipment.name}">Item</td>
+                        <td th:text="${booking.user.fullName}">User</td>
+                        <td th:text="${booking.dateFrom}">2026-01-01</td>
+                        <td th:text="${booking.dateTo}">2026-01-05</td>
+                        <td th:text="${booking.purpose}">Purpose</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

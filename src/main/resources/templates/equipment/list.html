@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Equipment')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Equipment</h1>
+        <a th:href="@{/equipment/new}" class="btn btn-primary">Add Equipment</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- Filter bar -->
+    <div class="card">
+        <form th:action="@{/equipment}" method="get" class="filter-bar">
+            <div class="form-group">
+                <label for="search">Search by Name</label>
+                <input type="text" id="search" name="search" class="form-control"
+                       th:value="${currentSearch}" placeholder="Equipment name...">
+            </div>
+            <div class="form-group">
+                <label for="categoryId">Category</label>
+                <select id="categoryId" name="categoryId" class="form-control">
+                    <option value="">All categories</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}" th:text="${category.name}"
+                            th:selected="${category.id == currentCategoryId}">Category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" class="form-control">
+                    <option value="">All statuses</option>
+                    <option th:each="statusOption : ${statuses}"
+                            th:value="${statusOption}" th:text="${statusOption}"
+                            th:selected="${statusOption == currentStatus}">STATUS</option>
+                </select>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a th:href="@{/equipment}" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Equipment table -->
+    <div class="card">
+        <div th:if="${#lists.isEmpty(equipmentList)}" class="empty-state">
+            <p>No equipment found matching your criteria.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(equipmentList)}" class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Cost/Day</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${equipmentList}">
+                        <td th:text="${item.id}">1</td>
+                        <td th:text="${item.name}">Equipment</td>
+                        <td th:text="${item.category.name}">Category</td>
+                        <td th:text="${item.location}">Location</td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="'badge-' + ${item.status.name().toLowerCase()}"
+                                  th:text="${item.status}">STATUS</span>
+                        </td>
+                        <td th:text="${item.costPerDay != null} ? '£' + ${#numbers.formatDecimal(item.costPerDay, 1, 2)} : '-'">£0.00</td>
+                        <td>
+                            <div class="btn-group">
+                                <a th:href="@{/equipment/{id}/edit(id=${item.id})}" class="btn btn-sm btn-warning">Edit</a>
+                                <form th:action="@{/equipment/{id}/delete(id=${item.id})}" method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this equipment?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

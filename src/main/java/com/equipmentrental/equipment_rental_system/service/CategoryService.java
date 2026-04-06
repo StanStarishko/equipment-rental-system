@@ -5,6 +5,8 @@ import com.equipmentrental.equipment_rental_system.exception.ResourceNotFoundExc
 import com.equipmentrental.equipment_rental_system.model.Category;
 import com.equipmentrental.equipment_rental_system.repository.CategoryRepository;
 import com.equipmentrental.equipment_rental_system.repository.EquipmentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class CategoryService {
+
+    private static final Logger log = LoggerFactory.getLogger(CategoryService.class);
 
     private final CategoryRepository categoryRepository;
     private final EquipmentRepository equipmentRepository;
@@ -34,7 +38,9 @@ public class CategoryService {
 
     @Transactional
     public Category save(Category category) {
-        return categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
+        log.info("Category saved: '{}' (ID: {})", savedCategory.getName(), savedCategory.getId());
+        return savedCategory;
     }
 
     /**
@@ -46,11 +52,14 @@ public class CategoryService {
 
         boolean hasEquipment = !equipmentRepository.findByCategoryId(categoryId).isEmpty();
         if (hasEquipment) {
+            log.warn("Deletion blocked for category '{}' (ID: {}): equipment items still assigned",
+                    category.getName(), categoryId);
             throw new DeletionBlockedException(
                     "category '" + category.getName() + "'",
                     "there are equipment items still assigned to this category");
         }
 
         categoryRepository.delete(category);
+        log.info("Category deleted: '{}' (ID: {})", category.getName(), categoryId);
     }
 }

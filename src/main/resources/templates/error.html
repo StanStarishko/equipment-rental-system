@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="error-page">
+        <h1 th:text="${status ?: '500'}">500</h1>
+        <h2 th:text="${error ?: 'Something went wrong'}">Something went wrong</h2>
+        <p th:text="${message ?: 'An unexpected error occurred. Please try again.'}">An unexpected error occurred.</p>
+        <a th:href="@{/}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

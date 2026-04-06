@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${formTitle})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1 th:text="${formTitle}">Category Form</h1>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/categories/save}" th:object="${category}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label for="name">Category Name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control"
+                       th:errorclass="form-control-error" placeholder="e.g. Audio Equipment">
+                <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" th:field="*{description}" class="form-control"
+                       th:errorclass="form-control-error" placeholder="Brief description of this category">
+                <span class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">error</span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Category</button>
+                <a th:href="@{/categories}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

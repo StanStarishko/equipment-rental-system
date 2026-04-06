@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${formTitle})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1 th:text="${formTitle}">Equipment Form</h1>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/equipment/save}" th:object="${equipment}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Equipment Name</label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control"
+                           th:errorclass="form-control-error" placeholder="e.g. Canon EOS R6 Camera">
+                    <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span>
+                </div>
+                <div class="form-group">
+                    <label for="categoryId">Category</label>
+                    <select id="categoryId" name="categoryId" class="form-control" required>
+                        <option value="">Select category...</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}" th:text="${category.name}"
+                                th:selected="${equipment.category != null and equipment.category.id == category.id}">Category</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" th:field="*{description}" class="form-control"
+                       placeholder="Brief description of this item">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" th:field="*{location}" class="form-control"
+                           th:errorclass="form-control-error" placeholder="e.g. Storage Room A">
+                    <span class="field-error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">error</span>
+                </div>
+                <div class="form-group">
+                    <label for="condition">Condition</label>
+                    <input type="text" id="condition" th:field="*{condition}" class="form-control"
+                           placeholder="e.g. Good, Fair, Excellent">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" th:field="*{status}" class="form-control" th:errorclass="form-control-error">
+                        <option value="">Select status...</option>
+                        <option th:each="statusOption : ${statuses}"
+                                th:value="${statusOption}" th:text="${statusOption}">STATUS</option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">error</span>
+                </div>
+                <div class="form-group">
+                    <label for="costPerDay">Cost Per Day (£)</label>
+                    <input type="number" id="costPerDay" th:field="*{costPerDay}" class="form-control"
+                           th:errorclass="form-control-error" step="0.01" min="0" placeholder="0.00">
+                    <span class="field-error" th:if="${#fields.hasErrors('costPerDay')}" th:errors="*{costPerDay}">error</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="purchaseDate">Purchase Date</label>
+                <input type="date" id="purchaseDate" th:field="*{purchaseDate}" class="form-control">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Equipment</button>
+                <a th:href="@{/equipment}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

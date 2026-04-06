@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Reusable head fragment -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | Equipment Rental System'">Equipment Rental System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- Navigation bar -->
+<nav th:fragment="navbar" class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Equipment Rental System</a>
+    <ul class="navbar-nav">
+        <li><a th:href="@{/}" th:classappend="${#strings.equals(activePage, 'dashboard')} ? 'active'">Dashboard</a></li>
+        <li><a th:href="@{/equipment}" th:classappend="${#strings.equals(activePage, 'equipment')} ? 'active'">Equipment</a></li>
+        <li><a th:href="@{/bookings}" th:classappend="${#strings.equals(activePage, 'bookings')} ? 'active'">Bookings</a></li>
+        <li><a th:href="@{/categories}" th:classappend="${#strings.equals(activePage, 'categories')} ? 'active'">Categories</a></li>
+        <li><a th:href="@{/users}" th:classappend="${#strings.equals(activePage, 'users')} ? 'active'">Users</a></li>
+    </ul>
+</nav>
+
+<!-- Footer -->
+<footer th:fragment="footer" class="footer">
+    <p>Equipment and Resource Booking Management System &copy; 2026 Stanislav Starishko</p>
+</footer>
+
+</body>
+</html>

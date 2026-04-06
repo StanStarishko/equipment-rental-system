@@ -1,6 +1,8 @@
 package com.equipmentrental.equipment_rental_system.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,12 +22,15 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Start date is required")
     @Column(nullable = false)
     private LocalDate dateFrom;
 
+    @NotNull(message = "End date is required")
     @Column(nullable = false)
     private LocalDate dateTo;
 
+    @NotBlank(message = "Booking purpose is required")
     private String purpose;
 
     @Enumerated(EnumType.STRING)
@@ -35,11 +40,11 @@ public class Booking {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "equipment_id", nullable = false)
     private Equipment equipment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
