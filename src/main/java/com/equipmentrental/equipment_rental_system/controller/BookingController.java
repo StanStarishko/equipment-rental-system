@@ -48,6 +48,7 @@ public class BookingController {
     public String save(@ModelAttribute Booking booking,
                        @RequestParam Long equipmentId,
                        @RequestParam Long userId,
+                       Model model,
                        RedirectAttributes redirectAttributes) {
         try {
             booking.setEquipment(equipmentService.findById(equipmentId));
@@ -56,8 +57,13 @@ public class BookingController {
             redirectAttributes.addFlashAttribute("successMessage", "Booking created successfully.");
             return "redirect:/bookings";
         } catch (InvalidBookingDatesException | EquipmentNotAvailableException | BookingConflictException exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-            return "redirect:/bookings/new";
+            model.addAttribute("activePage", "bookings");
+            model.addAttribute("errorMessage", exception.getMessage());
+            model.addAttribute("equipmentList", equipmentService.findAll());
+            model.addAttribute("users", userService.findAll());
+            model.addAttribute("selectedEquipmentId", equipmentId);
+            model.addAttribute("selectedUserId", userId);
+            return "booking/form";
         }
     }
 

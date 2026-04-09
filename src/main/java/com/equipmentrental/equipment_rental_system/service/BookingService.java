@@ -110,19 +110,25 @@ public class BookingService {
 
     /**
      * Cancels an existing booking.
+     * If no other active bookings remain for the equipment, reverts status to AVAILABLE (BR-08).
      */
     @Transactional
     public Booking cancelBooking(Long bookingId) {
         Booking booking = findById(bookingId);
         booking.cancel();
-
-        // BUG: should check if other active bookings exist for this equipment
-        // and revert status to AVAILABLE if none remain.
-
         Booking cancelledBooking = bookingRepository.save(booking);
 
+        // BR-08: check if equipment should revert to AVAILABLE
+        Long equipmentId = booking.getEquipment().getId();
+        boolean hasOtherActiveBookings = bookingRepository.findByEquipmentId(equipmentId).stream()
+                .anyMatch(otherBooking -> otherBooking.isActive() && !otherBooking.getId().equals(bookingId));
+
+        if (!hasOtherActiveBookings) {
+            equipmentService.updateStatus(equipmentId, EquipmentStatus.AVAILABLE);
+        }
+
         log.info("Booking cancelled: ID {}, equipment '{}' (ID: {})",
-                bookingId, booking.getEquipment().getName(), booking.getEquipment().getId());
+                bookingId, booking.getEquipment().getName(), equipmentId);
 
         return cancelledBooking;
     }

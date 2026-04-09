@@ -311,6 +311,23 @@ class BookingServiceTest {
             assertThrows(ResourceNotFoundException.class,
                     () -> bookingService.cancelBooking(999L));
         }
+
+        @Test
+        @DisplayName("Should revert equipment status to AVAILABLE when no other active bookings remain (BR-08)")
+        void shouldRevertEquipmentStatusWhenNoOtherActiveBookings() {
+            Booking activeBooking = buildValidBooking();
+            activeBooking.setId(1L);
+            activeBooking.setStatus(BookingStatus.CONFIRMED);
+            activeBooking.setEquipment(testEquipment);
+
+            when(bookingRepository.findById(1L)).thenReturn(Optional.of(activeBooking));
+            when(bookingRepository.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+            when(bookingRepository.findByEquipmentId(1L)).thenReturn(List.of(activeBooking));
+
+            bookingService.cancelBooking(1L);
+
+            verify(equipmentService).updateStatus(1L, EquipmentStatus.AVAILABLE);
+        }
     }
 
     @Nested

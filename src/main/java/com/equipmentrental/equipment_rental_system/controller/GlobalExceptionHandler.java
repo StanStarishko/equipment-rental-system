@@ -59,6 +59,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public String handleGenericException(Exception exception, Model model) {
+        if (exception instanceof org.springframework.web.servlet.resource.NoResourceFoundException) {
+            model.addAttribute("status", 404);
+            model.addAttribute("error", "Not Found");
+            model.addAttribute("message", "The requested page was not found.");
+            return "error";
+        }
         log.error("Unexpected error occurred", exception);
         model.addAttribute("status", 500);
         model.addAttribute("error", "Internal Server Error");

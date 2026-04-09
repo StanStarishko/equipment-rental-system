@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "booking")
 @Getter
@@ -23,10 +25,12 @@ public class Booking {
     private Long id;
 
     @NotNull(message = "Start date is required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate dateFrom;
 
     @NotNull(message = "End date is required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate dateTo;
 
