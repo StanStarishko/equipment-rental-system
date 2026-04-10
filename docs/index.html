@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Documentation | Equipment Rental System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #1a5276;
+            text-decoration: underline;
+        }
+
+        .navbar {
+            background-color: #2c3e50;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            color: #ecf0f1;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .container {
+            max-width: 780px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .intro h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.4rem;
+        }
+
+        .intro p {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .intro .live-link {
+            display: inline-block;
+            margin-top: 0.6rem;
+            padding: 0.4rem 1rem;
+            background-color: #2980b9;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .intro .live-link:hover {
+            background-color: #2471a3;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .doc-list {
+            list-style: none;
+        }
+
+        .doc-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .doc-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .doc-item:first-child {
+            padding-top: 0;
+        }
+
+        .doc-title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .doc-desc {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 0.2rem;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.1rem 0.45rem;
+            border-radius: 3px;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .tag-pdf {
+            background-color: #fdebd0;
+            color: #b9770e;
+        }
+
+        .tag-html {
+            background-color: #d5f5e3;
+            color: #1e8449;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #95a5a6;
+            font-size: 13px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 0 1rem; }
+            .container { padding: 0 1rem; }
+            .intro h1 { font-size: 19px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <span class="navbar-brand">Equipment Rental System</span>
+</nav>
+
+<div class="container">
+
+    <div class="intro">
+        <h1>Project Documentation</h1>
+        <p>Stanislav Starishko · HND Computing: Software Development · Graded Unit 2</p>
+        <a class="live-link" href="https://stan-equipment-rental-system.onrender.com" target="_blank">Open Live Application ↗</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Project Reports</h2>
+        </div>
+        <ul class="doc-list">
+            <li class="doc-item">
+                <span class="doc-title"><a href="https://github.com/StanStarishko/equipment-rental-system/blob/master/docs/Project_Proposal_Stanislav_Starishko.pdf" target="_blank">Project Proposal</a></span>
+                <span class="tag tag-pdf">PDF</span>
+                <p class="doc-desc">Initial project brief, scope definition and approval.</p>
+            </li>
+            <li class="doc-item">
+                <span class="doc-title"><a href="https://github.com/StanStarishko/equipment-rental-system/blob/master/docs/Project_Plan_Report_Stanislav_Starishko.pdf" target="_blank">Planning Stage: Action Plan Report</a></span>
+                <span class="tag tag-pdf">PDF</span>
+                <p class="doc-desc">Requirements analysis (FR, NFR, BR), UML design, database schema, wireframes and project schedule.</p>
+            </li>
+            <li class="doc-item">
+                <span class="doc-title"><a href="https://github.com/StanStarishko/equipment-rental-system/blob/master/docs/Development_Stage_Portfolio_Stanislav_Starishko.pdf" target="_blank">Development Stage: Portfolio</a></span>
+                <span class="tag tag-pdf">PDF</span>
+                <p class="doc-desc">Full implementation walkthrough, testing strategy, two documented test runs, bug fix and user documentation.</p>
+            </li>
+            <li class="doc-item">
+                <span class="doc-title"><a href="https://github.com/StanStarishko/equipment-rental-system/blob/master/docs/Evaluation_Report_Stanislav_Starishko.pdf" target="_blank">Evaluation Stage: Report</a></span>
+                <span class="tag tag-pdf">PDF</span>
+                <p class="doc-desc">Requirements coverage assessment, strengths and weaknesses, future recommendations and reflection.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Test Results</h2>
+        </div>
+        <ul class="doc-list">
+            <li class="doc-item">
+                <span class="doc-title"><a href="test_results/Test_Results_All_in_equipment-rental-system_01.html" target="_blank">Test Run 1: Before Bug Fix</a></span>
+                <span class="tag tag-html">HTML</span>
+                <p class="doc-desc">63 tests passed. All automated tests green prior to manual testing phase.</p>
+            </li>
+            <li class="doc-item">
+                <span class="doc-title"><a href="test_results/Test_Results_All_in_equipment-rental-system_02.html" target="_blank">Test Run 2: After Bug Fix</a></span>
+                <span class="tag tag-html">HTML</span>
+                <p class="doc-desc">64 tests passed. Includes regression test for the BR-08 equipment status revert fix.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>API Documentation</h2>
+        </div>
+        <ul class="doc-list">
+            <li class="doc-item">
+                <span class="doc-title"><a href="apidocs/index.html" target="_blank">Javadoc: Full API Reference</a></span>
+                <span class="tag tag-html">HTML</span>
+                <p class="doc-desc">Generated API documentation for all packages: model, service, repository, controller, exception and config.</p>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="footer">
+    Equipment and Resource Booking Management System &copy; 2026 Stanislav Starishko
+</div>
+
+</body>
+</html>
