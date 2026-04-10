@@ -7,13 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title} + ' | Equipment Rental System'">Equipment Rental System</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-64x64.png}">
 </head>
 
 <body>
 
 <!-- Navigation bar -->
 <nav th:fragment="navbar" class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Equipment Rental System</a>
+    <a class="navbar-brand" th:href="@{/}">
+        <img th:src="@{/img/logo_icon_128.png}" alt="Logo" class="navbar-logo">
+        Equipment Rental System
+    </a>
     <ul class="navbar-nav">
         <li><a th:href="@{/}" th:classappend="${#strings.equals(activePage, 'dashboard')} ? 'active'">Dashboard</a></li>
         <li><a th:href="@{/equipment}" th:classappend="${#strings.equals(activePage, 'equipment')} ? 'active'">Equipment</a></li>

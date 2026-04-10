@@ -39,6 +39,8 @@ a:hover {
 }
 
 .navbar-brand {
+    display: flex;
+    align-items: center;
     color: #ecf0f1;
     font-size: 18px;
     font-weight: 600;
@@ -64,6 +66,13 @@ a:hover {
     color: #ffffff;
     background-color: #34495e;
     text-decoration: none;
+}
+
+.navbar-logo {
+    height: 48px;
+    width: 48px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
 }
 
 .container {
