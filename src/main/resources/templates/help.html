@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Help & User Guide')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Help &amp; User Guide</h1>
+    </div>
+
+    <!-- Quick navigation -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Quick Navigation</h2>
+        </div>
+        <div class="help-nav">
+            <a href="#dashboard" class="help-nav-link">Dashboard</a>
+            <a href="#equipment" class="help-nav-link">Equipment</a>
+            <a href="#bookings" class="help-nav-link">Bookings</a>
+            <a href="#categories" class="help-nav-link">Categories</a>
+            <a href="#users" class="help-nav-link">Users</a>
+            <a href="#faq" class="help-nav-link">FAQ</a>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="card" id="dashboard">
+        <div class="card-header">
+            <h2>Dashboard</h2>
+        </div>
+        <p>The Dashboard is the main overview page, displayed when you first open the application. It shows:</p>
+        <ul class="help-list">
+            <li><strong>Equipment availability summary</strong> — colour-coded cards showing how many items are available, booked, or under maintenance.</li>
+            <li><strong>Active bookings</strong> — a table of all current confirmed bookings with equipment name, staff member, dates and purpose.</li>
+            <li><strong>Quick actions</strong> — shortcut buttons to create a new booking, add equipment, or view the full equipment list.</li>
+        </ul>
+    </div>
+
+    <!-- Equipment -->
+    <div class="card" id="equipment">
+        <div class="card-header">
+            <h2>Equipment Management</h2>
+        </div>
+        <p>The Equipment page allows you to view, add, edit and remove equipment items.</p>
+
+        <h3>Searching and Filtering</h3>
+        <p>Use the filter bar at the top of the Equipment page to narrow down results:</p>
+        <ul class="help-list">
+            <li><strong>Search by Name</strong> — type part of the equipment name. The search is case-insensitive.</li>
+            <li><strong>Category</strong> — select a category from the dropdown to show only items in that group.</li>
+            <li><strong>Status</strong> — filter by availability status (Available, Booked, Maintenance, Unavailable).</li>
+        </ul>
+        <p>Click <strong>Filter</strong> to apply or <strong>Clear</strong> to reset all filters.</p>
+
+        <h3>Adding and Editing Equipment</h3>
+        <p>Click <strong>Add Equipment</strong> to register a new item. All fields marked with an asterisk are required. Each item must be assigned to a category.</p>
+
+        <h3>Equipment Statuses</h3>
+        <div class="help-status-list">
+            <p><span class="badge badge-available">AVAILABLE</span> — the item is ready to be booked.</p>
+            <p><span class="badge badge-booked">BOOKED</span> — the item has at least one active booking. It can still be booked for non-overlapping dates.</p>
+            <p><span class="badge badge-maintenance">MAINTENANCE</span> — the item is temporarily out of service. It cannot be booked.</p>
+            <p><span class="badge badge-unavailable">UNAVAILABLE</span> — the item has been withdrawn. It cannot be booked.</p>
+        </div>
+
+        <div class="help-info">
+            <strong>Note:</strong> Equipment with active bookings cannot be deleted. Cancel all bookings first.
+        </div>
+    </div>
+
+    <!-- Bookings -->
+    <div class="card" id="bookings">
+        <div class="card-header">
+            <h2>Booking Management</h2>
+        </div>
+        <p>The Bookings page shows all reservations with their status, dates and assigned staff member.</p>
+
+        <h3>Creating a Booking</h3>
+        <p>To create a new booking:</p>
+        <ol class="help-list">
+            <li>Click <strong>New Booking</strong> from the Bookings page or Dashboard.</li>
+            <li>Select the equipment item. Items under maintenance or unavailable are shown but cannot be selected.</li>
+            <li>Select the staff member responsible for the booking.</li>
+            <li>Enter the start and end dates. The end date must be the same as or later than the start date.</li>
+            <li>Enter the purpose of the booking.</li>
+            <li>Click <strong>Create Booking</strong>.</li>
+        </ol>
+        <div class="help-info">
+            <strong>Note:</strong> The system will check for date conflicts automatically. If the selected equipment already has a confirmed booking that overlaps with your chosen dates, the booking will be rejected and the form will retain your entered data so you can adjust the dates.
+        </div>
+
+        <h3>Cancelling a Booking</h3>
+        <p>To cancel a booking, click the <strong>Cancel</strong> button next to the booking in the list. Only confirmed bookings can be cancelled. When a booking is cancelled, the equipment status will automatically revert to Available if no other active bookings remain for that item.</p>
+    </div>
+
+    <!-- Categories -->
+    <div class="card" id="categories">
+        <div class="card-header">
+            <h2>Category Management</h2>
+        </div>
+        <p>Categories are used to group equipment items by type (for example, Audio Equipment, Computing, Photography). This makes it easier to find and filter items.</p>
+        <ul class="help-list">
+            <li>Each equipment item must belong to exactly one category.</li>
+            <li>Category names must be unique.</li>
+            <li>A category can only be deleted if no equipment items are currently assigned to it. Reassign or remove the equipment first.</li>
+        </ul>
+    </div>
+
+    <!-- Users -->
+    <div class="card" id="users">
+        <div class="card-header">
+            <h2>User Management</h2>
+        </div>
+        <p>The Users page manages staff members who can create and manage bookings. Each user has a role:</p>
+        <ul class="help-list">
+            <li><span class="badge badge-admin">ADMIN</span> — full access to all system features including user management.</li>
+            <li><span class="badge badge-staff">STAFF</span> — can create and manage bookings and view equipment.</li>
+        </ul>
+        <div class="help-info">
+            <strong>Note:</strong> Users with active bookings cannot be deleted. Cancel their bookings first.
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="card" id="faq">
+        <div class="card-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-item">
+            <h3>Can I book equipment that is already booked?</h3>
+            <p>Yes, as long as the dates do not overlap. Equipment with a BOOKED status can still accept new bookings for different date ranges.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Why can I not select some equipment in the booking form?</h3>
+            <p>Equipment with a status of MAINTENANCE or UNAVAILABLE is shown in the dropdown but disabled. These items must be returned to Available status before they can be booked.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>What happens to the equipment status when I cancel a booking?</h3>
+            <p>If the cancelled booking was the only active booking for that item, the equipment status automatically reverts to Available. If other active bookings remain, the status stays as Booked.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Why can I not delete a category?</h3>
+            <p>Categories with equipment items assigned to them cannot be deleted. You need to reassign or remove all equipment from the category first.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Why can I not delete a user?</h3>
+            <p>Users who have active (confirmed) bookings cannot be deleted. Cancel their bookings first, then delete the user.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>What does the cost per day field mean?</h3>
+            <p>This is an optional field for recording the daily hire cost of an equipment item. It is displayed in the equipment list for reference but is not used in booking calculations in the current version.</p>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
