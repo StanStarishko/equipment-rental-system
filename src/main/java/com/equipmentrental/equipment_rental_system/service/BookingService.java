@@ -12,6 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Service layer for managing {@link Booking} entities.
+ * This is the central service in the application, orchestrating all booking-related
+ * business rules by coordinating with {@link EquipmentService} and {@link UserService}.
+ *
+ * <p>Business rules enforced:</p>
+ * <ul>
+ *   <li>BR-01: equipment in MAINTENANCE or UNAVAILABLE status cannot be booked
+ *       (delegated to {@link EquipmentService#verifyAvailableForBooking})</li>
+ *   <li>BR-02: overlapping bookings for the same equipment are rejected
+ *       (via {@link BookingRepository#findConflictingBookings})</li>
+ *   <li>BR-03: every booking must reference a registered user</li>
+ *   <li>BR-05: end date must be equal to or later than start date</li>
+ *   <li>BR-08: equipment status is updated when bookings are created or cancelled
+ *       (delegated to {@link EquipmentService#updateStatus})</li>
+ * </ul>
+ *
+ * @see Booking
+ * @see BookingRepository
+ * @see EquipmentService
+ * @see UserService
+ */
 @Service
 @Transactional(readOnly = true)
 public class BookingService {
@@ -30,19 +52,43 @@ public class BookingService {
         this.userService = userService;
     }
 
+    /**
+     * Returns all bookings in the system.
+     *
+     * @return list of all bookings
+     */
     public List<Booking> findAll() {
         return bookingRepository.findAll();
     }
 
+    /**
+     * Finds a booking by its ID.
+     *
+     * @param bookingId the ID of the booking to find
+     * @return the booking
+     * @throws ResourceNotFoundException if no booking exists with the given ID
+     */
     public Booking findById(Long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", bookingId));
     }
 
+    /**
+     * Finds all bookings created by a specific user.
+     *
+     * @param userId the ID of the user
+     * @return list of bookings for the given user
+     */
     public List<Booking> findByUserId(Long userId) {
         return bookingRepository.findByUserId(userId);
     }
 
+    /**
+     * Finds all bookings for a specific equipment item.
+     *
+     * @param equipmentId the ID of the equipment
+     * @return list of bookings for the given equipment
+     */
     public List<Booking> findByEquipmentId(Long equipmentId) {
         return bookingRepository.findByEquipmentId(equipmentId);
     }
@@ -50,12 +96,23 @@ public class BookingService {
     /**
      * Creates a new booking after validating all business rules.
      *
-     * Checks performed in order:
-     * 1. BR-05: end date must be equal to or later than start date
-     * 2. BR-03: booking must reference a valid registered user
-     * 3. BR-01: equipment must not be in MAINTENANCE or UNAVAILABLE status
-     * 4. BR-02: no overlapping confirmed bookings for the same equipment
-     * 5. BR-08: equipment status updated to BOOKED after successful creation
+     * <p>Checks are performed in the following order:</p>
+     * <ol>
+     *   <li>BR-05: end date must be equal to or later than start date</li>
+     *   <li>BR-03: the user must exist in the system</li>
+     *   <li>BR-01: the equipment must not be in MAINTENANCE or UNAVAILABLE status</li>
+     *   <li>BR-02: no overlapping confirmed bookings may exist for the same equipment</li>
+     * </ol>
+     *
+     * <p>If all checks pass, the booking is saved with CONFIRMED status and the
+     * equipment status is updated to BOOKED (BR-08).</p>
+     *
+     * @param booking the booking to create (must have equipment and user set)
+     * @return the saved booking with generated ID and CONFIRMED status
+     * @throws InvalidBookingDatesException if the end date is before the start date
+     * @throws ResourceNotFoundException   if the user or equipment does not exist
+     * @throws EquipmentNotAvailableException if the equipment is in MAINTENANCE or UNAVAILABLE status
+     * @throws BookingConflictException     if an overlapping confirmed booking exists
      */
     @Transactional
     public Booking createBooking(Booking booking) {
@@ -109,8 +166,15 @@ public class BookingService {
     }
 
     /**
-     * Cancels an existing booking.
-     * If no other active bookings remain for the equipment, reverts status to AVAILABLE (BR-08).
+     * Cancels an existing booking and updates the equipment status if appropriate (BR-08).
+     *
+     * <p>After setting the booking status to CANCELLED, this method checks whether
+     * any other active (confirmed) bookings remain for the same equipment item.
+     * If none remain, the equipment status is reverted to AVAILABLE.</p>
+     *
+     * @param bookingId the ID of the booking to cancel
+     * @return the cancelled booking
+     * @throws ResourceNotFoundException if no booking exists with the given ID
      */
     @Transactional
     public Booking cancelBooking(Long bookingId) {

@@ -10,6 +10,16 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Populates the database with sample data on application startup.
+ * Implements {@link CommandLineRunner} so it executes automatically after
+ * the Spring context is initialised.
+ *
+ * <p>Creates a representative set of categories, users, equipment items and
+ * bookings to demonstrate the system's functionality without requiring
+ * manual data entry. All dates use relative offsets from the current date
+ * so the sample data remains relevant regardless of when the application is started.</p>
+ */
 @Component
 public class DataInitialiser implements CommandLineRunner {
 

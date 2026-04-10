@@ -13,6 +13,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a physical equipment item available for booking.
+ * This is the central entity in the system: it is categorised, booked and tracked.
+ *
+ * <p>Each item belongs to exactly one {@link Category} (BR-04) and can have
+ * multiple {@link Booking} records. The {@link EquipmentStatus} reflects the
+ * current availability and is updated automatically when bookings are created
+ * or cancelled (BR-08).</p>
+ *
+ * <p>Equipment with active bookings cannot be deleted (BR-07).
+ * Items in MAINTENANCE or UNAVAILABLE status cannot be booked (BR-01).</p>
+ *
+ * @see Category
+ * @see Booking
+ * @see EquipmentStatus
+ * @see com.equipmentrental.equipment_rental_system.service.EquipmentService
+ */
 @Entity
 @Table(name = "equipment")
 @Getter
@@ -53,6 +70,18 @@ public class Equipment {
     @OneToMany(mappedBy = "equipment")
     private List<Booking> bookings = new ArrayList<>();
 
+    /**
+     * Creates a new equipment item with all fields.
+     *
+     * @param name         display name of the item
+     * @param description  brief description
+     * @param location     physical storage location
+     * @param condition    current physical condition (e.g. Good, Fair, Excellent)
+     * @param status       availability status
+     * @param purchaseDate date the item was acquired
+     * @param costPerDay   daily booking cost in pounds sterling
+     * @param category     the category this item belongs to
+     */
     public Equipment(String name, String description, String location, String condition,
                      EquipmentStatus status, LocalDate purchaseDate, BigDecimal costPerDay,
                      Category category) {
@@ -66,10 +95,20 @@ public class Equipment {
         this.category = category;
     }
 
+    /**
+     * Checks whether this equipment item has AVAILABLE status.
+     *
+     * @return {@code true} if the status is {@link EquipmentStatus#AVAILABLE}
+     */
     public boolean isAvailable() {
         return status == EquipmentStatus.AVAILABLE;
     }
 
+    /**
+     * Updates the equipment status to the specified value.
+     *
+     * @param newStatus the new status to set
+     */
     public void updateStatus(EquipmentStatus newStatus) {
         this.status = newStatus;
     }

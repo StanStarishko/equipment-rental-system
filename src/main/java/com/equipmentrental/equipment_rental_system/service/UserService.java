@@ -13,6 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Service layer for managing {@link User} entities.
+ * Handles CRUD operations and prevents deletion of users who have active bookings.
+ *
+ * @see User
+ * @see UserRepository
+ */
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -28,20 +35,45 @@ public class UserService {
         this.bookingRepository = bookingRepository;
     }
 
+    /**
+     * Returns all registered users.
+     *
+     * @return list of all users
+     */
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    /**
+     * Finds a user by their ID.
+     *
+     * @param userId the ID of the user to find
+     * @return the user
+     * @throws ResourceNotFoundException if no user exists with the given ID
+     */
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
     }
 
+    /**
+     * Finds a user by their unique username.
+     *
+     * @param username the username to search for
+     * @return the user
+     * @throws ResourceNotFoundException if no user exists with the given username
+     */
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", null));
     }
 
+    /**
+     * Saves a new or updated user.
+     *
+     * @param user the user to save
+     * @return the saved user with generated ID (if new)
+     */
     @Transactional
     public User save(User user) {
         User savedUser = userRepository.save(user);
@@ -50,6 +82,13 @@ public class UserService {
         return savedUser;
     }
 
+    /**
+     * Deletes a user if they have no active (confirmed) bookings.
+     *
+     * @param userId the ID of the user to delete
+     * @throws ResourceNotFoundException if no user exists with the given ID
+     * @throws DeletionBlockedException  if the user has active bookings
+     */
     @Transactional
     public void deleteById(Long userId) {
         User user = findById(userId);

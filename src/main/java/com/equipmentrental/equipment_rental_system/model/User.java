@@ -12,6 +12,17 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a staff member who can create and manage equipment bookings.
+ * Every booking must be linked to a registered user (BR-03).
+ *
+ * <p>The table is named {@code app_user} rather than {@code user} because
+ * "user" is a reserved keyword in H2 and PostgreSQL.</p>
+ *
+ * @see Booking
+ * @see UserRole
+ * @see com.equipmentrental.equipment_rental_system.service.UserService
+ */
 @Entity
 @Table(name = "app_user")
 @Getter
@@ -56,6 +67,18 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
 
+    /**
+     * Creates a new user with all required and optional fields.
+     *
+     * @param username   unique login identifier
+     * @param password   user password (stored as plain text in this prototype)
+     * @param firstName  first name of the staff member
+     * @param lastName   last name of the staff member
+     * @param role       access level (ADMIN or STAFF)
+     * @param department organisational department
+     * @param phone      contact telephone number
+     * @param email      contact email address
+     */
     public User(String username, String password, String firstName, String lastName,
                 UserRole role, String department, String phone, String email) {
         this.username = username;
@@ -68,6 +91,11 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Returns the user's full name by combining first and last name.
+     *
+     * @return the full name in "FirstName LastName" format
+     */
     public String getFullName() {
         return firstName + " " + lastName;
     }

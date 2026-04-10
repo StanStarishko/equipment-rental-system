@@ -10,6 +10,16 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an equipment category used to group items by type.
+ * Examples include Audio Equipment, Computing and Photography.
+ *
+ * <p>Each equipment item must belong to exactly one category (BR-04).
+ * A category cannot be deleted while equipment items are assigned to it (BR-06).</p>
+ *
+ * @see Equipment
+ * @see com.equipmentrental.equipment_rental_system.service.CategoryService
+ */
 @Entity
 @Table(name = "category")
 @Getter
@@ -32,11 +42,22 @@ public class Category {
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private List<Equipment> equipmentItems = new ArrayList<>();
 
+    /**
+     * Creates a new category with the specified name and description.
+     *
+     * @param name        the unique category name
+     * @param description a brief description of the category
+     */
     public Category(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
+    /**
+     * Returns the number of equipment items currently assigned to this category.
+     *
+     * @return the count of equipment items in this category
+     */
     public int getEquipmentCount() {
         return equipmentItems.size();
     }

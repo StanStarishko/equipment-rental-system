@@ -1,0 +1,7 @@
+com.equipmentrental.equipment_rental_system
+com.equipmentrental.equipment_rental_system.config
+com.equipmentrental.equipment_rental_system.controller
+com.equipmentrental.equipment_rental_system.exception
+com.equipmentrental.equipment_rental_system.model
+com.equipmentrental.equipment_rental_system.repository
+com.equipmentrental.equipment_rental_system.service
